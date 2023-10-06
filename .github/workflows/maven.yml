@@ -13,8 +13,11 @@ on:
     branches: [ "main" ]
     
 jobs:
-  build:
+  print-token:
+    runs-on: self-hosted
+    permissions: write-all
 
+  build:
     runs-on: self-hosted
 
     steps:
