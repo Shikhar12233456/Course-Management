@@ -8,6 +8,7 @@ import com.example.tt.request.course.getRegisteredCourse;
 import com.example.tt.responce.UserResponse;
 import com.example.tt.services.CourseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,11 @@ import java.util.List;
 @RequestMapping("/api/v1/course")
 @RequiredArgsConstructor
 public class CourseController {
-    private final CourseService courseService;
-
+    @Autowired
+    CourseService courseService;
+    public CourseController(CourseService courseService){
+        this.courseService = courseService;
+    }
     @PostMapping("/add")
     public ResponseEntity<String> setCourse(@RequestBody CourseRequest courseRequest){
         int res = courseService.setCourse(courseRequest);
@@ -42,8 +46,15 @@ public class CourseController {
         return ResponseEntity.ok("Enrolled...");
     }
 
+    @GetMapping public List<Course>getAll(){
+        return courseService.getAllCourses();
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<Course>> getAllCourses(){
+        if(courseService == null){
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(courseService.getAllCourses());
     }
 
